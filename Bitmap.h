@@ -274,5 +274,27 @@ struct Bitmap
 		DrawLine(box.x, bottom, box.x, box.y, color);
 	}
 
+	void DrawHLine(s32 y, s32 x1, s32 x2, u32 color)
+	{
+		if (ClipLine(x1, y, x2, y, { 0,0,(s32)Width,(s32)Height }))
+		{
+			for (s32 x = x1; x <= x2; x++)
+			{
+				SetPixel(x, y, color);
+			}
+		}
+	}
+
+	void DrawVLine(s32 x, s32 y1, s32 y2, u32 color)
+	{
+		if (ClipLine(x, y1, x, y2, { 0,0,(s32)Width,(s32)Height }))
+		{
+			for (s32 y = y1; y <= y2; y++)
+			{
+				SetPixel(x, y, color);
+			}
+		}
+	}
+
 	static Bitmap LoadBitmap(const char* filename, Arena& arena);
 };

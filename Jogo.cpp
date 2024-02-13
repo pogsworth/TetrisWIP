@@ -11,16 +11,7 @@ namespace Jogo
 	HWND hwnd;
 	bool Pause = false;
 
-	JogoApp::JogoApp() :
-		KEY_LEFT(VK_LEFT),
-		KEY_RIGHT(VK_RIGHT),
-		KEY_UP(VK_UP),
-		KEY_DOWN(VK_DOWN),
-		KEY_ESC(VK_ESCAPE),
-		KEY_ENTER(VK_RETURN),
-		BUTTON_LEFT(VK_LBUTTON),
-		BUTTON_RIGHT(VK_RBUTTON),
-		BUTTON_MIDDLE(VK_MBUTTON)
+	JogoApp::JogoApp()
 	{}
 
 	LRESULT CALLBACK JogoWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -145,6 +136,7 @@ namespace Jogo
 		HINSTANCE hInstance = GetModuleHandle(nullptr);
 		wc.hInstance = hInstance;
 		wc.lpszClassName = App.GetName();
+		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
 		if (RegisterClass(&wc))
 		{
@@ -264,4 +256,14 @@ namespace Jogo
 	{
 		OutputDebugString(message);
 	}
+
+	int JogoApp::KEY_LEFT = VK_LEFT;
+	int JogoApp::KEY_RIGHT = VK_RIGHT;
+	int JogoApp::KEY_UP = VK_UP;
+	int JogoApp::KEY_DOWN = VK_DOWN;
+	int JogoApp::KEY_ESC = VK_ESCAPE;
+	int JogoApp::KEY_ENTER = VK_RETURN;
+	int JogoApp::BUTTON_LEFT = VK_LBUTTON;
+	int JogoApp::BUTTON_RIGHT = VK_RBUTTON;
+	int JogoApp::BUTTON_MIDDLE = VK_MBUTTON;
 }

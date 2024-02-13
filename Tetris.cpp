@@ -2,6 +2,7 @@
 #include "Bitmap.h"
 #include "Font.h"
 #include "Arena.h"
+#include "UI.h"
 
 class TetrisGame : public Jogo::JogoApp
 {
@@ -111,6 +112,7 @@ public:
 		DefaultFont = Font::LoadFont("Font16.fnt", GameArena);
 		ShuffleNextList();
 		CurrentPiece = NextPieceList[CurrentPieceIndex]; 
+		UI::Init(BackBuffer, DefaultFont);
 	}
 
 	~TetrisGame()
@@ -487,10 +489,11 @@ public:
 	void Draw() override
 	{
 		u32 black = 0x00000000;
-		ClearBuffer(black);
+//		ClearBuffer(black);
 
 		// TODO: move to testing function
 		BackBuffer.PasteBitmap(deltaX*4, deltaY*4, TestBitmap, 0xff0000);
+		BackBuffer.FillRect({ PlayFieldLeft, PlayFieldTop, PlayFieldWidth * BlockSize, PlayFieldHeight * BlockSize }, 0);
 		const char* HelloWorld = "Hello World!";
 		u32 cursor = 250;
 //		DefaultFont.DrawText(deltaX, deltaY, HelloWorld, 0xff0000, BackBuffer);
@@ -502,7 +505,7 @@ public:
 		const char* Clipped = "Clipped!";
 		const char* NotClipped = "";
 		const char* Message = !clipped ? Clipped : NotClipped;
-		DefaultFont.DrawText(0, 0, Message, 0xffffff, BackBuffer);
+		DefaultFont.DrawText(0, 0, Message, 0, BackBuffer);
 
 		// TODO: move to debug section
 		char X[16] = {};
@@ -510,9 +513,9 @@ public:
 		itoa(mouseX + deltaX, X);
 		itoa(mouseY + deltaY, Y);
 
-		DefaultFont.DrawText(0, 16, X, 0xffffff, BackBuffer);
-		DefaultFont.DrawText(0, 32, Y, 0xffffff, BackBuffer);
-		DefaultFont.DrawText(0, 48, LastChar, 0xffffff, BackBuffer);
+		DefaultFont.DrawText(0, 16, X, 0, BackBuffer);
+		DefaultFont.DrawText(0, 32, Y, 0, BackBuffer);
+ 		DefaultFont.DrawText(0, 48, LastChar, 0, BackBuffer);
 
 //		BackBuffer.DrawLine(mouseX, mouseY, mouseX + deltaX, mouseY + deltaY, 0x00ff00);
 		DrawPlayField();
@@ -535,7 +538,7 @@ public:
 			PrintScore /= 10;
 		}
 		Bitmap::Rect ScoreSize = DefaultFont.GetTextSize(ScoreString);
-		DefaultFont.DrawText((Width - ScoreSize.w) / 2, 0, ScoreString, 0xffffff, BackBuffer);
+		DefaultFont.DrawText((Width - ScoreSize.w) / 2, 0, ScoreString, 0, BackBuffer);
 
 		if (GameOver)
 		{
@@ -550,7 +553,37 @@ public:
 				DefaultFont.DrawText((Width - MessageSize.w)/2, (Height + DefaultFont.CharacterHeight*3)/2, PressEnterToPlay, 0xffffff, BackBuffer);
 			}
 		}
+		UI::BeginFrame({ 0,0,Width,Height });
 
+		char ButtonText[] = "Button0";
+		static char Clicked[] = "Nothing Clicked.";
+		for (u32 i = 0; i < 5; i++)
+		{
+			ButtonText[6] = '1' + i;
+			if (UI::Button(ButtonText))
+			{
+				char* p = ButtonText;
+				char* d = Clicked;
+				while (*p)
+					*d++ = *p++;
+			}
+		}
+		DefaultFont.DrawText(0, 200, Clicked, 0, BackBuffer);
+
+#ifdef DEBUG_UI
+		char HotID[] = "HotID: ";
+		char ActiveID[] = "ActiveID: ";
+		char HotIDString[8];
+		char ActiveIDString[8];
+		DefaultFont.DrawText(0, 220, HotID, 0, BackBuffer);
+		DefaultFont.DrawText(0, 240, ActiveID, 0, BackBuffer);
+		HotIDString[0] = 0;
+		ActiveIDString[0] = 0;
+		itoa(UI::HotID&0xfff, HotIDString);
+		itoa(UI::ActiveID&0xfff, ActiveIDString);
+		DefaultFont.DrawText(70, 220, HotIDString, 0, BackBuffer);
+		DefaultFont.DrawText(100, 240, ActiveIDString, 0, BackBuffer);
+#endif // DEBUG_UI
 		Jogo::Show(BackBuffer.PixelBGRA, Width, Height);
 	}
 

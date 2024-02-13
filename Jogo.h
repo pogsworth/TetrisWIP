@@ -27,15 +27,15 @@ namespace Jogo
 		virtual void MouseUp(s32 x, s32 y, u32 buttons) {}
 		virtual void MouseMove(s32 x, s32 y, u32 buttons) {}
 
-		const int KEY_LEFT;
-		const int KEY_RIGHT;
-		const int KEY_UP;
-		const int KEY_DOWN;
-		const int KEY_ESC;
-		const int KEY_ENTER;
-		const int BUTTON_LEFT;
-		const int BUTTON_RIGHT;
-		const int BUTTON_MIDDLE;
+		static int KEY_LEFT;
+		static int KEY_RIGHT;
+		static int KEY_UP;
+		static int KEY_DOWN;
+		static int KEY_ESC;
+		static int KEY_ENTER;
+		static int BUTTON_LEFT;
+		static int BUTTON_RIGHT;
+		static int BUTTON_MIDDLE;
 	};
 
 	// event loop
